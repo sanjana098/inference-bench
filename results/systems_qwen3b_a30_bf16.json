@@ -1,0 +1,42 @@
+{
+  "model": "Qwen/Qwen2.5-3B-Instruct",
+  "max_tokens": 64,
+  "sweeps": [
+    {
+      "concurrency": 1,
+      "n_requests": 100,
+      "wall_time_s": 63.166294587776065,
+      "latency_percentiles_s": {
+        "p50": 0.6317411959171295,
+        "p95": 0.6338423136621714,
+        "p99": 0.6357222776859999
+      },
+      "throughput_tokens_per_s": 101.31985803135154,
+      "throughput_bytes_per_s": 489.18493955761915
+    },
+    {
+      "concurrency": 5,
+      "n_requests": 100,
+      "wall_time_s": 13.285225266590714,
+      "latency_percentiles_s": {
+        "p50": 0.6597467288374901,
+        "p95": 0.6713635884225368,
+        "p99": 0.6806592810899019
+      },
+      "throughput_tokens_per_s": 481.73816187329,
+      "throughput_bytes_per_s": 2352.0865753463386
+    },
+    {
+      "concurrency": 20,
+      "n_requests": 100,
+      "wall_time_s": 3.6554238945245743,
+      "latency_percentiles_s": {
+        "p50": 0.7193903587758541,
+        "p95": 0.7442436888813972,
+        "p99": 0.7553775738924742
+      },
+      "throughput_tokens_per_s": 1750.8229372758933,
+      "throughput_bytes_per_s": 8454.833390538868
+    }
+  ]
+}

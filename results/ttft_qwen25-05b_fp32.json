@@ -1,0 +1,39 @@
+{
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "dtype": "fp32",
+  "gpu": "NVIDIA A30",
+  "warmup_runs": 2,
+  "measured_runs": 5,
+  "rows": [
+    {
+      "prompt_tokens": 100,
+      "ttft_p50_s": 0.0269741490483284,
+      "ttft_min_s": 0.026933250948786736,
+      "ttft_max_s": 0.027623547241091728
+    },
+    {
+      "prompt_tokens": 500,
+      "ttft_p50_s": 0.05334106460213661,
+      "ttft_min_s": 0.0533006377518177,
+      "ttft_max_s": 0.0535513199865818
+    },
+    {
+      "prompt_tokens": 1000,
+      "ttft_p50_s": 0.09586426988244057,
+      "ttft_min_s": 0.09539295919239521,
+      "ttft_max_s": 0.09711402095854282
+    },
+    {
+      "prompt_tokens": 2000,
+      "ttft_p50_s": 0.19886567629873753,
+      "ttft_min_s": 0.19793108291924,
+      "ttft_max_s": 0.19971026666462421
+    },
+    {
+      "prompt_tokens": 4000,
+      "ttft_p50_s": 0.4380080383270979,
+      "ttft_min_s": 0.4357492998242378,
+      "ttft_max_s": 0.4388723596930504
+    }
+  ]
+}

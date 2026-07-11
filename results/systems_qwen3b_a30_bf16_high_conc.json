@@ -1,0 +1,30 @@
+{
+  "model": "Qwen/Qwen2.5-3B-Instruct",
+  "max_tokens": 64,
+  "sweeps": [
+    {
+      "concurrency": 40,
+      "n_requests": 200,
+      "wall_time_s": 3.9011840615421534,
+      "latency_percentiles_s": {
+        "p50": 0.7535530477762222,
+        "p95": 0.8030355740338564,
+        "p99": 0.8068391978740692
+      },
+      "throughput_tokens_per_s": 3281.0551355887856,
+      "throughput_bytes_per_s": 15842.882321109413
+    },
+    {
+      "concurrency": 80,
+      "n_requests": 200,
+      "wall_time_s": 2.7588660828769207,
+      "latency_percentiles_s": {
+        "p50": 0.9194473754614592,
+        "p95": 0.983336566016078,
+        "p99": 1.029925113543868
+      },
+      "throughput_tokens_per_s": 4626.538446074126,
+      "throughput_bytes_per_s": 22362.448247457163
+    }
+  ]
+}
