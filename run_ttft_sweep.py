@@ -26,7 +26,8 @@ try:
     import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
     plt.plot([r["prompt_tokens"] for r in rows], [1000 * r["ttft_p50_s"] for r in rows], marker="o")
     plt.xlabel("prompt tokens"); plt.ylabel("TTFT p50 (ms)")
-    plt.tie("Qwen2.5-0.5B-Instruct on NVIDIA A30 — prefill cost vs prompt length")
+    plt.title("TTFT vs prompt length: Qwen2.5-0.5B fp32, NVIDIA A30")
+    plt.tight_layout()
     plt.grid(alpha=.3); plt.savefig("results/ttft_vs_prompt.png", dpi=150, bbox_inches="tight"); print("wrote results/ttft_vs_prompt.png")
 except Exception as e:
     print("chart skipped:", e)
