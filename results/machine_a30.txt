@@ -1,0 +1,5 @@
+GPU: NVIDIA A30, 24576 MiB, 535.309.01, 8.0
+CPU: Intel(R) Xeon(R) Gold 5416S
+RAM: 503Gi
+OS: Ubuntu 22.04.5 LTS
+Python: Python 3.10.12  torch: 2.5.1+cu121

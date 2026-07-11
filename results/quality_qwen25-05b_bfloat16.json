@@ -1,0 +1,70 @@
+{
+  "meta": {
+    "model": "Qwen/Qwen2.5-0.5B-Instruct",
+    "dtype": "bfloat16",
+    "device": "cuda",
+    "gpu": "NVIDIA A30",
+    "n_texts": 200,
+    "max_length": 512,
+    "n_qa": 5,
+    "decoding": "greedy"
+  },
+  "lm": {
+    "total_nll": 110525.74951171875,
+    "total_tokens": 35729,
+    "total_bytes": 149787,
+    "ppl": 22.05295235048012,
+    "bpb": 1.0645446581551965
+  },
+  "sft": {
+    "total_nll": 74.15243530273438,
+    "total_tokens": 18,
+    "ppl": 61.533376753739596
+  },
+  "gen": {
+    "em": 0.0,
+    "f1": 0.23534798534798534,
+    "n": 5,
+    "records": [
+      {
+        "question": "What is the capital of France?",
+        "gold": "Paris",
+        "pred": "The capital of France is Paris.",
+        "em": 0.0,
+        "f1": 0.33333333333333337
+      },
+      {
+        "question": "What is 12 + 15?",
+        "gold": "27",
+        "pred": "The sum of 12 and 15 is 27.",
+        "em": 0.0,
+        "f1": 0.25
+      },
+      {
+        "question": "Who wrote Hamlet?",
+        "gold": "William Shakespeare",
+        "pred": "Hamlet is a play written by William Shakespeare. The play was first performed in",
+        "em": 0.0,
+        "f1": 0.2857142857142857
+      },
+      {
+        "question": "What gas do plants absorb?",
+        "gold": "carbon dioxide",
+        "pred": "Plants absorb carbon dioxide (CO2) from the atmosphere through their leaves and",
+        "em": 0.0,
+        "f1": 0.3076923076923077
+      },
+      {
+        "question": "How many legs does a spider have?",
+        "gold": "8",
+        "pred": "A spider has eight legs.",
+        "em": 0.0,
+        "f1": 0.0
+      }
+    ],
+    "em_ci95": [
+      0.0,
+      0.0
+    ]
+  }
+}

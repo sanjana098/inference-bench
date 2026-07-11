@@ -1,0 +1,70 @@
+{
+  "meta": {
+    "model": "Qwen/Qwen2.5-3B-Instruct",
+    "dtype": "bfloat16",
+    "device": "cuda",
+    "gpu": "NVIDIA A30",
+    "n_texts": 200,
+    "max_length": 512,
+    "n_qa": 5,
+    "decoding": "greedy"
+  },
+  "lm": {
+    "total_nll": 92592.16998291016,
+    "total_tokens": 35729,
+    "total_bytes": 149787,
+    "ppl": 13.349955561876833,
+    "bpb": 0.8918148067555425
+  },
+  "sft": {
+    "total_nll": 142.02947998046875,
+    "total_tokens": 18,
+    "ppl": 2671.8507220018137
+  },
+  "gen": {
+    "em": 0.0,
+    "f1": 0.23555555555555557,
+    "n": 5,
+    "records": [
+      {
+        "question": "What is the capital of France?",
+        "gold": "Paris",
+        "pred": "The capital of France is Paris.",
+        "em": 0.0,
+        "f1": 0.33333333333333337
+      },
+      {
+        "question": "What is 12 + 15?",
+        "gold": "27",
+        "pred": "12 + 15 equals 27.",
+        "em": 0.0,
+        "f1": 0.4
+      },
+      {
+        "question": "Who wrote Hamlet?",
+        "gold": "William Shakespeare",
+        "pred": "The play \"Hamlet\" was written by William Shakespeare.",
+        "em": 0.0,
+        "f1": 0.4444444444444445
+      },
+      {
+        "question": "What gas do plants absorb?",
+        "gold": "carbon dioxide",
+        "pred": "Plants primarily absorb water and dissolved minerals from the soil through their roots. However",
+        "em": 0.0,
+        "f1": 0.0
+      },
+      {
+        "question": "How many legs does a spider have?",
+        "gold": "8",
+        "pred": "A spider typically has eight legs.",
+        "em": 0.0,
+        "f1": 0.0
+      }
+    ],
+    "em_ci95": [
+      0.0,
+      0.0
+    ]
+  }
+}
