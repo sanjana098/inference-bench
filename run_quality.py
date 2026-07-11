@@ -1,5 +1,3 @@
-# python3 run_quality.py Qwen/Qwen2.5-0.5B-Instruct fp32
-# python3 run_quality.py Qwen/Qwen2.5-3B-Instruct bf16
 import sys, json, torch
 from datasets import load_dataset
 from evalkit import load_hf, make_loader, lm_bpb, sft_nll, eval_generation, bootstrap_ci

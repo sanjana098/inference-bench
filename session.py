@@ -1,4 +1,3 @@
-# python3 -i session.py  — loads model, tokenizer, data; run inside tmux
 import json, math, torch, torch.nn.functional as F
 from datasets import load_dataset
 from evalkit import *

@@ -1,4 +1,3 @@
-# python3 run_ttft_sweep.py   — TTFT p50 vs prompt length, then a chart
 import json, time, torch
 from evalkit import load_hf
 

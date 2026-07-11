@@ -6,3 +6,4 @@ mlruns/
 *.safetensors
 hf_cache/
 results/baseline/
+setup_evalkit.sh

@@ -2,7 +2,6 @@
 response-only NLL, continuation log-likelihood, multiple choice), generation (EM, F1), statistics
 (bootstrap, paired tests), systems (latency), and validity checks (contamination, WER, sanity signals).
 """
-# ---- D14 answer extraction ----
 import re
 from collections import Counter
 
@@ -31,7 +30,6 @@ def majority_vote(answers):
     votes = Counter(a for a in answers if a is not None)
     return votes.most_common(1)[0][0] if votes else None
 
-# ---- D15 judge harness ----
 import json
 
 def evaluate_pair(question, answer_a, answer_b, judge):
@@ -65,7 +63,6 @@ def cohen_kappa(labels_a, labels_b):
     pe = sum((labels_a.count(c) / n) * (labels_b.count(c) / n) for c in cats)
     return 1.0 if pe == 1 else (po - pe) / (1 - pe)
 
-# ---- D16 statistics ----
 import numpy as np
 
 def se_proportion(p, n):
@@ -90,7 +87,6 @@ def n_for_margin(p, margin):
     """Examples needed so that a 95% interval is about +/- margin."""
     return int(np.ceil((1.96 ** 2) * p * (1 - p) / margin ** 2))
 
-# ---- D20 contamination ----
 import hashlib
 
 def norm_text(s):
@@ -119,7 +115,6 @@ def contamination_report(train_texts, eval_texts, n=8, jaccard_threshold=0.5):
     return {"n_eval": len(eval_texts), "n_flagged": len(flagged),
             "flag_rate": len(flagged) / max(1, len(eval_texts)), "flagged": flagged}
 
-# ---- D21 label-order sensitivity helpers ----
 import itertools
 
 def letter_frequencies(preds):
@@ -131,7 +126,6 @@ def permute_choices(row, perm):
     choices = [row["choices"][j] for j in perm]
     return {**row, "choices": choices, "answer": perm.index(row["answer"])}
 
-# ---- D22 output sanity ----
 def repetition_rate(text, n=4):
     toks = text.split()
     grams = [" ".join(toks[i:i + n]) for i in range(len(toks) - n + 1)]
@@ -150,7 +144,6 @@ def output_sanity(preds, max_new_tokens, n_new_tokens):
         "len_tokens_p50": float(np.percentile(n_new_tokens, 50)) if n_new_tokens else 0.0,
     }
 
-# ---- D23 WER ----
 def edit_distance(ref, hyp):
     """Levenshtein over word lists. Returns (distance, S, D, I)."""
     R, H = len(ref), len(hyp)
@@ -170,7 +163,6 @@ def wer(refs, hyps):
         edits += edit_distance(rw, hw); words += len(rw)
     return edits / max(1, words)
 
-# ---- D24 VQA soft accuracy ----
 def vqa_soft_accuracy(pred, human_answers):
     """VQA v2 convention: min(#humans who gave this answer / 3, 1)."""
     p = norm_text(pred)
@@ -178,14 +170,12 @@ def vqa_soft_accuracy(pred, human_answers):
     return min(agree / 3.0, 1.0)
 
 
-# Reference implementations that need a model. Run on the A30 with the venv active.
 import math, time, json, subprocess, datetime, platform
 import torch, torch.nn.functional as F
 from torch.utils.data import DataLoader
 from transformers import AutoTokenizer, AutoModelForCausalLM, DataCollatorWithPadding
 from datasets import load_dataset
 
-# ---------------- D0 setup ----------------
 def load_hf(model_id, device, dtype=torch.float32):
     tok = AutoTokenizer.from_pretrained(model_id)
     if tok.pad_token is None:
@@ -201,7 +191,6 @@ def make_loader(texts, tok, batch_size, max_length):
     return DataLoader(examples, batch_size=batch_size, shuffle=False,
                       collate_fn=DataCollatorWithPadding(tokenizer=tok, padding=True))
 
-# ---------------- D7 NLL / perplexity ----------------
 def lm_nll(model, loader, device):
     model.eval()
     total_nll = torch.zeros((), dtype=torch.float64, device=device)
@@ -217,7 +206,6 @@ def lm_nll(model, loader, device):
     nll, n = total_nll.item(), total_tok.item()
     return {"total_nll": nll, "total_tokens": n, "ppl": math.exp(nll / n)}
 
-# ---------------- D7b response-only NLL ----------------
 def build_sft_batch(tok, pairs, device, max_length=256):
     starts, full_texts = [], []
     for p in pairs:
@@ -245,7 +233,6 @@ def sft_nll(model, tok, pairs, device):
         nll = -(logp * mask).sum().item(); n = mask.sum().item()
     return {"total_nll": nll, "total_tokens": n, "ppl": math.exp(nll / n)}
 
-# ---------------- D7c KL to a reference model ----------------
 def kl_to_reference(policy, ref, loader, device):
     """Token-weighted mean KL(policy || ref) on the same text. Both models must share a tokenizer."""
     policy.eval(); ref.eval()
@@ -261,7 +248,6 @@ def kl_to_reference(policy, ref, loader, device):
             total_kl += (kl_tok * mask).sum(); total_tok += mask.sum()
     return total_kl.item() / total_tok.item()
 
-# ---------------- D8 bits-per-byte ----------------
 def lm_bpb(model, tok, loader, device):
     model.eval()
     total_nll = torch.zeros((), dtype=torch.float64, device=device)
@@ -280,7 +266,6 @@ def lm_bpb(model, tok, loader, device):
     return {"total_nll": nll, "total_tokens": n, "total_bytes": total_bytes,
             "ppl": math.exp(nll / n), "bpb": (nll / math.log(2)) / total_bytes}
 
-# ---------------- D9 sliding-window perplexity ----------------
 def sliding_window_ppl(model, tok, text, device, max_length=512, stride=256):
     ids = tok(text, return_tensors="pt", add_special_tokens=False)["input_ids"][0]
     n = ids.numel(); total_nll, total_tok, prev_end = 0.0, 0, 0
@@ -297,7 +282,6 @@ def sliding_window_ppl(model, tok, text, device, max_length=512, stride=256):
             if end == n: break
     return math.exp(total_nll / total_tok)
 
-# ---------------- D10 token accuracy ----------------
 def token_accuracy(model, loader, device, k=5):
     model.eval(); correct1 = correctk = 0; n = 0
     with torch.inference_mode():
@@ -311,7 +295,6 @@ def token_accuracy(model, loader, device, k=5):
             n += mask.sum().item()
     return {"top1": correct1 / n, f"top{k}": correctk / n, "n_tokens": n}
 
-# ---------------- D11 continuation log-likelihood ----------------
 def continuation_logprob(model, tok, prompt, continuation, device):
     """Sum of log p(continuation tokens | prompt). Tokenizes the JOINED string and finds the span."""
     p_ids = tok(prompt, add_special_tokens=False)["input_ids"]
@@ -327,7 +310,6 @@ def continuation_logprob(model, tok, prompt, continuation, device):
     return {"sum_logp": cont.sum().item(), "n_tokens": int(cont.numel()),
             "n_bytes": len(continuation.encode("utf-8"))}
 
-# ---------------- D12 multiple choice: acc, acc_norm, letter scoring ----------------
 def mc_accuracy(model, tok, rows, device, prompt_fn):
     """rows: {question, choices[4], answer:int}. prompt_fn(row) -> prompt string ending in 'Answer:'."""
     acc = acc_norm = 0
@@ -355,7 +337,6 @@ def letter_token_ids(tok):
         ids[L] = t[0]
     return ids
 
-# ---------------- D13 generation -> EM / F1 ----------------
 import re
 from collections import Counter
 
@@ -407,7 +388,6 @@ def eval_generation(model, tok, qa, device, batch_size=16):
     n = len(qa)
     return {"em": em_sum / n, "f1": f1_sum / n, "n": n, "records": records}
 
-# ---------------- D17 template / seed spread ----------------
 def template_spread(model, tok, qa, device, templates):
     """templates: list of functions question -> question string. Returns mean/std of EM across them."""
     scores = []
@@ -418,7 +398,6 @@ def template_spread(model, tok, qa, device, templates):
     return {"per_template": scores, "mean": statistics.mean(scores),
             "std": statistics.pstdev(scores) if len(scores) > 1 else 0.0}
 
-# ---------------- D18 dtype parity, dynamic padding, memory ----------------
 def length_sorted_loader(texts, tok, batch_size, max_length):
     order = sorted(range(len(texts)), key=lambda i: len(texts[i]))   # similar lengths together -> less padding
     return make_loader([texts[i] for i in order], tok, batch_size, max_length)
@@ -434,7 +413,6 @@ def dtype_parity(model_id, texts, device, max_length=512):
     out["ppl_rel_diff"] = abs(out["bf16"]["ppl"] - out["fp32"]["ppl"]) / out["fp32"]["ppl"]
     return out
 
-# ---------------- D19 generation latency ----------------
 def generation_latency(model, tok, prompts, device, max_new_tokens=32, warmup=2):
     import numpy as np
     ttft, total = [], []
@@ -453,9 +431,7 @@ def generation_latency(model, tok, prompts, device, max_new_tokens=32, warmup=2)
     return {"ttft_s": pct(ttft), "latency_s": pct(total),
             "tokens_per_s": max_new_tokens / (sum(total) / len(total))}
 
-# ---------------- D25 one evaluate() with a reproducible report ----------------
 def evaluate(model, tok, texts, qa, device, model_id, seed=0):
-    # bootstrap_ci is defined above in this module
     torch.manual_seed(seed)
     loader = make_loader(texts, tok, 4, 512)
     r_lm = lm_bpb(model, tok, loader, device)
