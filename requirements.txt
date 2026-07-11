@@ -1,0 +1,9 @@
+torch
+datasets
+numpy
+requests
+scikit-learn
+jiwer
+matplotlib
+transformers==4.46.3
+torch==2.5.1  # install with --index-url https://download.pytorch.org/whl/cu121 (driver supports CUDA 12.2)
